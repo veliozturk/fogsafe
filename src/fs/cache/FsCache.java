@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import fs.model.FsLabel;
 import fs.model.FsPhrase;
 import fs.model.FsPhraseLabel;
+import fs.model.XFile;
 import fs.util.HttpUtil;
 
 public class FsCache {
@@ -34,13 +35,18 @@ public class FsCache {
 			return;
 		}
 		String token = j.getString("token");
-		
+		s = HttpUtil.send(url+"ListFiles", "tokenKey=" + URLEncoder.encode(token));
+
+
+		JSONObject jfiles =  new JSONObject(s);
+		System.out.println("Files in " + (System.currentTimeMillis()- startTime) + " ms");
+		startTime = System.currentTimeMillis();		
 		
 		s = HttpUtil.send(url+"ListLabels", "tokenKey=" + URLEncoder.encode(token));
 
 
 		JSONObject jlabels =  new JSONObject(s);
-		//System.out.println(jlabels);
+
 		
 //		
 		JSONArray data = jlabels.getJSONArray("data");
@@ -76,6 +82,31 @@ public class FsCache {
 			phrases.add(p);
 			phraseMap.put(p.getPhraseId(), p);
 		}
+		
+
+		for(FsLabel l : labels) if(l.getParentLabelId()!=0){
+			FsLabel p = labelMap.get(l.getParentLabelId());
+			if(p!=null) {
+				if(p.get_children()==null)p.set_children(new ArrayList<FsLabel>());
+				p.get_children().add(l);
+			}		
+		}
+
+		data = jfiles.getJSONArray("data");
+		int fileSize = data.length();
+		for(int qi=0;qi<fileSize;qi++) {
+			JSONObject o = data.getJSONObject(qi);
+			if(o.getInt("table_id")==5350) {//phrase
+				FsPhrase p = phraseMap.get(o.getInt("table_pk"));
+				if(p==null)continue;
+				if(p.get_files()==null) {
+					p.set_files(new ArrayList());
+				}
+				p.get_files().add(new XFile(o));
+			}
+
+		}
+		
 		System.out.println("Phrases in " + (System.currentTimeMillis()- startTime) + " ms");
 		startTime = System.currentTimeMillis();
 		

@@ -2,6 +2,7 @@ package fs.model;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,6 +31,7 @@ public class FsPhrase {
 	
 	private Set<Integer> _setTabOrder;
 	private Set<Integer> _setLkpLabelCategoryType;
+	private List<XFile> _files;
 	
 	
 	
@@ -178,7 +180,15 @@ public class FsPhrase {
 		m.put("xtype", lkpPhraseType);
 		FsLabel l = FsCache.labelMap.get(_managementLabelId);
 		if(l!=null)m.put("xman", l.getDsc());
+//		if(_files!=null)m.put("files", _files);
 		return m;
+	}
+	
+	public List<XFile> get_files() {
+		return _files;
+	}
+	public void set_files(List<XFile> _files) {
+		this._files = _files;
 	}	
 
 	

@@ -14,6 +14,7 @@ public class FsLabel implements java.io.Serializable {
 	private int parentLabelId;
 	private int lkpLabelCategoryType;
 	private String dsc;
+	private String longDsc;
 	private String synonyms;
 	
 	private String bodyLabelIds;
@@ -36,6 +37,7 @@ public class FsLabel implements java.io.Serializable {
 		this.mechanismLabelIds = j.getString("mechanism_label_ids");
 		if(j.has("dsc"))this.dsc = j.getString("dsc");
 		if(j.has("synonyms"))this.synonyms = j.getString("synonyms");
+		if(j.has("long_dsc"))this.longDsc = j.getString("long_dsc");
 	}
 
 //	@Id
@@ -141,6 +143,14 @@ public class FsLabel implements java.io.Serializable {
 
 	public void setSynonyms(String synonyms) {
 		this.synonyms = synonyms;
+	}
+
+	public String getLongDsc() {
+		return longDsc;
+	}
+
+	public void setLongDsc(String longDsc) {
+		this.longDsc = longDsc;
 	}
 	
 	
