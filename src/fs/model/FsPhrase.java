@@ -176,6 +176,7 @@ public class FsPhrase {
 		Map m = new HashMap();
 		m.put("id", phraseId);
 		m.put("dsc", getTextBody());
+		m.put("refId", referenceId);
 //		m.put("html", getBody());
 		m.put("xtype", lkpPhraseType);
 		FsLabel l = FsCache.labelMap.get(_managementLabelId);
