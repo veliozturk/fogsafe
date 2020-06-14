@@ -138,6 +138,8 @@ public class FsController {
 		  if(p!=null) {
 			  m.put("body", p.getBody());
 			  m.put("xtype", p.getLkpPhraseType());
+			  if(p.get_files()!=null)
+				  m.put("files", p.get_files());
 		  }
 		  return m;
 		  
@@ -402,9 +404,10 @@ public class FsController {
 			  FsLabel bodyLabel = FsCache.labelMap.get(p.get_bodyLabelId());
 			  xx.put("body_part", bodyLabel!=null ? bodyLabel.getFullDsc(): ("MissingBodyLabel: "+p.get_bodyLabelId()));
 			  xx.put("lkp_mechanism_type", p.get_mechanismLabelId());
-			  FsLabel mechanismLabel = FsCache.labelMap.get(p.get_mechanismLabelId());
-			  xx.put("lkp_mechanism_type_qw_", mechanismLabel!=null ? mechanismLabel.getDsc(): ("MissinMechanismLabel: " + p.get_mechanismLabelId()));
-			  
+			  if(p.get_mechanismLabelId()!=2050) {
+				  FsLabel mechanismLabel = FsCache.labelMap.get(p.get_mechanismLabelId());
+				  xx.put("lkp_mechanism_type_qw_", mechanismLabel!=null ? mechanismLabel.getDsc(): ("MissinMechanismLabel: " + p.get_mechanismLabelId()));
+			  }
 			  
 			  Set<Integer> lm = new HashSet(); //list of manifestation labels
 			  Set<Integer> ld = new HashSet(); //list of disease labels
@@ -446,7 +449,10 @@ public class FsController {
 				  for(Integer labelId:lm) {
 					  Map mmm = new HashMap();
 					  mmm.put("id", labelId);
-					  mmm.put("dsc", FsCache.labelMap.get(labelId).getDsc());
+					  FsLabel l = FsCache.labelMap.get(labelId);
+					  mmm.put("dsc", l.getDsc());
+					  if(!isEmpty(l.getLongDsc()))mmm.put("longDsc", l.getLongDsc());
+					  if(!isEmpty(l.getSynonyms()))mmm.put("synonyms", l.getSynonyms());
 					  lmm.add(mmm);
 				  }
 				  
@@ -457,7 +463,10 @@ public class FsController {
 				  for(Integer labelId:ld) {
 					  Map mmm = new HashMap();
 					  mmm.put("id", labelId);
-					  mmm.put("dsc", FsCache.labelMap.get(labelId).getDsc());
+					  FsLabel l = FsCache.labelMap.get(labelId);
+					  mmm.put("dsc", l.getDsc());
+					  if(!isEmpty(l.getLongDsc()))mmm.put("longDsc", l.getLongDsc());
+					  if(!isEmpty(l.getSynonyms()))mmm.put("synonyms", l.getSynonyms());
 					  lmm.add(mmm);
 				  }
 				  
@@ -468,7 +477,10 @@ public class FsController {
 				  for(Integer labelId:lt) {
 					  Map mmm = new HashMap();
 					  mmm.put("id", labelId);
-					  mmm.put("dsc", FsCache.labelMap.get(labelId).getDsc());
+					  FsLabel l = FsCache.labelMap.get(labelId);
+					  mmm.put("dsc", l.getDsc());
+					  if(!isEmpty(l.getLongDsc()))mmm.put("longDsc", l.getLongDsc());
+					  if(!isEmpty(l.getSynonyms()))mmm.put("synonyms", l.getSynonyms());
 					  lmm.add(mmm);
 				  }
 				  
