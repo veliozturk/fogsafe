@@ -13,12 +13,14 @@ import org.json.JSONObject;
 import fs.model.FsLabel;
 import fs.model.FsPhrase;
 import fs.model.FsPhraseLabel;
+import fs.model.FsReference;
 import fs.model.XFile;
 import fs.util.HttpUtil;
 
 public class FsCache {
 	public static Map<Integer, FsLabel> labelMap;
 	public static Map<Integer, FsPhrase> phraseMap;
+	public static Map<Integer, FsReference> referenceMap;
 	private static String url = "http://localhost/rest/16c51c8e-28c9-4b6f-b603-0b584d2d78a7/FogSafe/";
 	
 	public static void reloadCache() {
@@ -42,13 +44,10 @@ public class FsCache {
 		System.out.println("Files in " + (System.currentTimeMillis()- startTime) + " ms");
 		startTime = System.currentTimeMillis();		
 		
-		s = HttpUtil.send(url+"ListLabels", "tokenKey=" + URLEncoder.encode(token));
-
-
-		JSONObject jlabels =  new JSONObject(s);
-
 		
-//		
+		s = HttpUtil.send(url+"ListLabels", "tokenKey=" + URLEncoder.encode(token));
+		JSONObject jlabels =  new JSONObject(s);
+	
 		JSONArray data = jlabels.getJSONArray("data");
 		int labelSize = data.length();
 		List<FsLabel> labels = new ArrayList(labelSize);//find("from FsLabel order by labelId");
@@ -184,9 +183,25 @@ public class FsCache {
 			
 		}
 		System.out.println("PhraseConditions in " + (System.currentTimeMillis()- startTime) + " ms");
+		startTime = System.currentTimeMillis();
+		
+		s = HttpUtil.send(url+"ListReferences", "tokenKey=" + URLEncoder.encode(token));
+
+		JSONObject jreferences =  new JSONObject(s);
+		data = jreferences.getJSONArray("data");
+		int referenceSize = data.length();
+		Map<Integer, FsReference> referenceMap = new HashMap<Integer, FsReference>(referenceSize*4/3+3);
+		//for(FsPhrase p : phrases)phraseMap.put(p.getPhraseId(), p);
+		for(int qi=0;qi<referenceSize;qi++) {
+			FsReference p = new FsReference(data.getJSONObject(qi));
+			referenceMap.put(p.getReferenceId(), p);
+		}
+		System.out.println("References in " + (System.currentTimeMillis()- startTime) + " ms");
+		
 		
 		FsCache.labelMap = labelMap;
-		FsCache.phraseMap = phraseMap;
+		FsCache.phraseMap = phraseMap;		
+		FsCache.referenceMap = referenceMap;
 		
 		
 

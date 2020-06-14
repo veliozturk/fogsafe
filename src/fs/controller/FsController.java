@@ -11,8 +11,7 @@ import java.util.Set;
 import fs.cache.FsCache;
 import fs.model.FsLabel;
 import fs.model.FsPhrase;
-
-
+import fs.model.FsReference;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -371,6 +370,7 @@ public class FsController {
 
 		  Map<String, Map> bodyMech = new HashMap();
 		  int id = 0;
+		  Map<Integer, FsReference> refMap = new HashMap();
 		  for(FsPhrase p:phrases)  if(p.get_bodyLabelId()!=null && p.get_mechanismLabelId()!=null) {
 			  String k = p.get_bodyLabelId()+"."+p.get_mechanismLabelId();
 			  Map xx = bodyMech.get(k);
@@ -387,6 +387,7 @@ public class FsController {
 					  xx.put("considers", considers);
 				  }
 				  considers.add(p.get_asMap());
+				  if(!refMap.containsKey(p.getReferenceId()))refMap.put(p.getReferenceId(), FsCache.referenceMap.get(p.getReferenceId()));
 			  }
 			  
 			  if(p.get_setLkpLabelCategoryType().contains(19)) { //action
@@ -396,6 +397,7 @@ public class FsController {
 					  xx.put("actions", actions);
 				  }
 				  actions.add(p.get_asMap());
+				  if(!refMap.containsKey(p.getReferenceId()))refMap.put(p.getReferenceId(), FsCache.referenceMap.get(p.getReferenceId()));
 			  }
 			  
 			  if(!isNew)continue;
@@ -499,6 +501,7 @@ public class FsController {
 		  
 		  
 		  m.put("data", data);
+		  m.put("ref", refMap);
 
 		  m.put("success", true);
 			System.out.println("query2Result in " + (System.currentTimeMillis()- startTime) + " ms");
