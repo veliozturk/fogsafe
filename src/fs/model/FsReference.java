@@ -7,6 +7,7 @@ public class FsReference {
 	private String title;
 	private String url;
 	private String publishDt;
+	private static String[] months = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 	
 	public FsReference() {
 		super();
@@ -19,6 +20,8 @@ public class FsReference {
 		title = o.getString("reference_title");
 		url = o.getString("reference_url");
 		publishDt = o.getString("publish_dt").substring(0,10);
+		int month = Integer.parseUnsignedInt(publishDt.substring(3, 5))-1;
+		publishDt = months[month] + ", " + publishDt.substring(6);
 	}
 	
 	
