@@ -7,6 +7,7 @@ public class FsReference {
 	private String title;
 	private String url;
 	private String publishDt;
+	private String institutions;
 	private static String[] months = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 	
 	public FsReference() {
@@ -22,6 +23,7 @@ public class FsReference {
 		publishDt = o.getString("publish_dt").substring(0,10);
 		int month = Integer.parseUnsignedInt(publishDt.substring(3, 5))-1;
 		publishDt = months[month] + ", " + publishDt.substring(6);
+		if(o.has("reference_institution_ids"))institutions = o.getString("reference_institution_ids");
 	}
 	
 	
@@ -51,6 +53,16 @@ public class FsReference {
 
 	public void setPublishDt(String publishDt) {
 		this.publishDt = publishDt;
+	}
+
+
+	public String getInstitutions() {
+		return institutions;
+	}
+
+
+	public void setInstitutions(String institutions) {
+		this.institutions = institutions;
 	}
 
 	

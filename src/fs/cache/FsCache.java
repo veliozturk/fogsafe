@@ -10,6 +10,7 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import fs.model.FsInstitution;
 import fs.model.FsLabel;
 import fs.model.FsPhrase;
 import fs.model.FsPhraseLabel;
@@ -21,6 +22,7 @@ public class FsCache {
 	public static Map<Integer, FsLabel> labelMap;
 	public static Map<Integer, FsPhrase> phraseMap;
 	public static Map<Integer, FsReference> referenceMap;
+	public static Map<Integer, FsInstitution> institutionMap;
 	private static String url = "http://localhost/rest/16c51c8e-28c9-4b6f-b603-0b584d2d78a7/FogSafe/";
 	
 	public static void reloadCache() {
@@ -198,11 +200,25 @@ public class FsCache {
 		}
 		System.out.println("References in " + (System.currentTimeMillis()- startTime) + " ms");
 		
+		s = HttpUtil.send(url+"ListReferenceInstitutions", "tokenKey=" + URLEncoder.encode(token));
+		JSONObject jinstitutions =  new JSONObject(s);
+		data = jinstitutions.getJSONArray("data");
+		int institutionSize = data.length();
+		Map<Integer, FsInstitution> institutionMap = new HashMap<Integer, FsInstitution>(institutionSize*4/3+3);
+		//for(FsPhrase p : phrases)phraseMap.put(p.getPhraseId(), p);
+		for(int qi=0;qi<institutionSize;qi++) {
+			FsInstitution p = new FsInstitution(data.getJSONObject(qi));
+			institutionMap.put(p.getInstitutionId(), p);
+		}
+
+		System.out.println("Institutions in " + (System.currentTimeMillis()- startTime) + " ms");
+		
+	
 		
 		FsCache.labelMap = labelMap;
 		FsCache.phraseMap = phraseMap;		
 		FsCache.referenceMap = referenceMap;
-		
+		FsCache.institutionMap = institutionMap;	
 		
 
 	}
