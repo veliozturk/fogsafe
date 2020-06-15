@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import fs.cache.FsCache;
+import fs.model.FsInstitution;
 import fs.model.FsLabel;
 import fs.model.FsPhrase;
 import fs.model.FsReference;
@@ -371,6 +372,7 @@ public class FsController {
 		  Map<String, Map> bodyMech = new HashMap();
 		  int id = 0;
 		  Map<Integer, FsReference> refMap = new HashMap();
+		  Map<Integer, FsInstitution> instMap = new HashMap();
 		  for(FsPhrase p:phrases)  if(p.get_bodyLabelId()!=null && p.get_mechanismLabelId()!=null) {
 			  String k = p.get_bodyLabelId()+"."+p.get_mechanismLabelId();
 			  Map xx = bodyMech.get(k);
@@ -502,6 +504,20 @@ public class FsController {
 		  
 		  m.put("data", data);
 		  m.put("ref", refMap);
+		  for(FsReference r:refMap.values()) {
+			  String s = r.getInstitutions();
+			  if(isEmpty(s))continue;
+			  String[] ss = s.split(",");
+			  for(int qi=0;qi<ss.length;qi++){
+				  int instId = new Integer(ss[qi]);
+				  if(!instMap.containsKey(instId)) {
+					  FsInstitution ii = FsCache.institutionMap.get(instId);
+					  if(ii!=null)instMap.put(instId, ii);
+				  }
+				  
+			  }
+		  }
+		  m.put("inst", instMap);
 
 		  m.put("success", true);
 			System.out.println("query2Result in " + (System.currentTimeMillis()- startTime) + " ms");
