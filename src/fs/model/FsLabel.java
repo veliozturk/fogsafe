@@ -44,9 +44,9 @@ public class FsLabel implements java.io.Serializable {
 		if(j.has("dsc"))this.dsc = j.getString("dsc");
 		if(j.has("synonyms"))this.synonyms = j.getString("synonyms");
 		if(j.has("long_dsc"))this.longDsc = j.getString("long_dsc");
-		if(j.has("lkp_gender_type"))this.gender = j.getInt("lkp_gender_type");
-		if(j.has("min_age"))this.minAge = j.getInt("min_age");
-		if(j.has("max_age"))this.maxAge = j.getInt("max_age");
+		if(j.has("lkp_gender_type") && j.get("lkp_gender_type").toString().length()>0)this.gender = j.getInt("lkp_gender_type");
+		if(j.has("min_age") && j.get("min_age").toString().length()>0)this.minAge = j.getInt("min_age");
+		if(j.has("max_age") && j.get("max_age").toString().length()>0)this.maxAge = j.getInt("max_age");
 		this._setBodyLabels = new HashSet<Integer>();
 		this._setMechanismLabels = new HashSet<Integer>();
 		if(this.bodyLabelIds!=null && this.bodyLabelIds.length()>0)for(String k:this.bodyLabelIds.split(","))this._setBodyLabels.add(Integer.parseInt(k));
