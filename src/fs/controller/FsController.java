@@ -162,7 +162,7 @@ public class FsController {
 		  if(!isEmpty(labelIds) && !labelIds.equals("null")) {
 			  String[] xx = labelIds.split(",");
 			  for(int qi=0;qi<xx.length;qi++) {
-				  FsLabel l = FsCache.labelMap.get(new Integer(xx[qi]));
+				  FsLabel l = FsCache.labelMap.get(Integer.parseInt(xx[qi]));
 				  if(l.getLkpLabelCategoryType() ==1) {
 					  if(setBodyLabels == null)
 						  setBodyLabels = new HashSet();
@@ -296,7 +296,7 @@ public class FsController {
 		  if(!isEmpty(labelIds) && !labelIds.equals("null")) {
 			  String[] xx = labelIds.split(",");
 			  for(int qi=0;qi<xx.length;qi++) {
-				  FsLabel l = FsCache.labelMap.get(new Integer(xx[qi]));
+				  FsLabel l = FsCache.labelMap.get(Integer.parseInt(xx[qi]));
 				  if(l.getLkpLabelCategoryType() ==1) {
 					  if(setBodyLabels == null)
 						  setBodyLabels = new HashSet();
@@ -308,7 +308,8 @@ public class FsController {
 				  }
 			  }			  
 		  }
-		  
+			System.out.println("query2Result.1 in " + (System.currentTimeMillis()- startTime) + " ms");startTime = System.currentTimeMillis();		
+			
 		  if(setLabels!=null) {
 			  for(Integer lid:setLabels) try{
 				  recursiveLabel2(FsCache.labelMap.get(lid), result, setBodyLabels);
@@ -345,6 +346,7 @@ public class FsController {
 				  }
 			  }
 		  }
+			System.out.println("query2Result.2 in " + (System.currentTimeMillis()- startTime) + " ms");startTime = System.currentTimeMillis();		
 		  
 		  List<FsPhrase> phrases = new ArrayList<FsPhrase>(); // list of phrases
 		  for(Integer pid:result.keySet()) {
@@ -367,7 +369,7 @@ public class FsController {
 		  }
 		  
 
-		  
+			System.out.println("query2Result.3 in " + (System.currentTimeMillis()- startTime) + " ms");startTime = System.currentTimeMillis();		
 
 		  Map<String, Map> bodyMech = new HashMap();
 		  int id = 0;
@@ -418,10 +420,15 @@ public class FsController {
 			  Set<Integer> lt = new HashSet(); //list of treatment labels
 			  
 			  Set<Integer> m2 = null;
-			  for(FsLabel l:FsCache.labelMap.values())if(l.getBodyLabelIds()!=null 
-					  && (","+l.getBodyLabelIds()+",").contains(","+p.get_bodyLabelId()+",")
-					  && l.getMechanismLabelIds()!=null
-					  && (","+l.getMechanismLabelIds()+",").contains(","+p.get_mechanismLabelId()+",")) {
+			  for(FsLabel l:FsCache.labelMap.values())if(
+					  // l.getBodyLabelIds()!=null 
+					  //&& (","+l.getBodyLabelIds()+",").contains(","+p.get_bodyLabelId()+",")
+					  l.get_setBodyLabels().contains(p.get_bodyLabelId())
+					  //&& l.getMechanismLabelIds()!=null
+					  //&& (","+l.getMechanismLabelIds()+",").contains(","+p.get_mechanismLabelId()+",")
+					  && l.get_setMechanismLabels().contains(p.get_mechanismLabelId())
+					  ) {
+				 
 				  switch(l.getLkpLabelCategoryType()) {
 				  case 7://manif
 					  if(lm==null) {
@@ -491,6 +498,7 @@ public class FsController {
 			  }
 
 		  }
+			System.out.println("query2Result.4 in " + (System.currentTimeMillis()- startTime) + " ms");startTime = System.currentTimeMillis();		
 		  List<Map> data = new ArrayList(bodyMech.values());
 		  
 
@@ -501,6 +509,7 @@ public class FsController {
 			     }
 			});
 		  
+			System.out.println("query2Result.5 in " + (System.currentTimeMillis()- startTime) + " ms");startTime = System.currentTimeMillis();		
 		  
 		  m.put("data", data);
 		  m.put("ref", refMap);
@@ -509,7 +518,7 @@ public class FsController {
 			  if(isEmpty(s))continue;
 			  String[] ss = s.split(",");
 			  for(int qi=0;qi<ss.length;qi++){
-				  int instId = new Integer(ss[qi]);
+				  int instId = Integer.parseInt(ss[qi]);
 				  if(!instMap.containsKey(instId)) {
 					  FsInstitution ii = FsCache.institutionMap.get(instId);
 					  if(ii!=null)instMap.put(instId, ii);
@@ -517,6 +526,7 @@ public class FsController {
 				  
 			  }
 		  }
+			
 		  m.put("inst", instMap);
 
 		  m.put("success", true);
