@@ -138,6 +138,7 @@ public class FsController {
 		  if(p!=null) {
 			  m.put("body", p.getBody());
 			  m.put("xtype", p.getLkpPhraseType());
+			  m.put("refId", p.getReferenceId());
 			  if(p.get_files()!=null)
 				  m.put("files", p.get_files());
 		  }
@@ -279,6 +280,7 @@ public class FsController {
 		
 	  @GetMapping("/query2")
 	  Map<String, Object> query2(
+			  @RequestParam(required = false) Integer referenceId,
 			  @RequestParam(required = false) Integer lkpGender,
 			  @RequestParam(required = false) Integer age,
 			  @RequestParam(required = false) Integer height,
@@ -346,19 +348,16 @@ public class FsController {
 				  }
 			  }
 		  }
-			System.out.println("query2Result.2 in " + (System.currentTimeMillis()- startTime) + " ms");startTime = System.currentTimeMillis();		
+		  System.out.println("query2Result.2 in " + (System.currentTimeMillis()- startTime) + " ms");startTime = System.currentTimeMillis();		
 		  
 		  List<FsPhrase> phrases = new ArrayList<FsPhrase>(); // list of phrases
 		  for(Integer pid:result.keySet()) {
 			  FsPhrase p = FsCache.phraseMap.get(pid); 
-			  if(pid==4950) {
+/*			  if(pid==4950) {
 				  pid = pid;
-			  }
+			  } */
+			  if(referenceId!=null && p.getReferenceId()!=referenceId)continue;
 			  if(result.get(pid).isEmpty()) {//.isEmpty() !=null
-
-				  if(p.getPhraseId()==4950) {
-					  p = p;
-				  }
 				  if((lkpGender==null || p.get_lkpGender()==null || lkpGender.intValue()==p.get_lkpGender().intValue())
 						  && (age==null || (age.intValue()>0 && p.get_minAge()<=age.intValue() && p.get_maxAge()>=age.intValue())
 								  || (age.intValue()<0 && p.get_minAge()>=age.intValue() && p.get_maxAge()<=age.intValue()))) {
@@ -369,7 +368,7 @@ public class FsController {
 		  }
 		  
 
-			System.out.println("query2Result.3 in " + (System.currentTimeMillis()- startTime) + " ms");startTime = System.currentTimeMillis();		
+		  System.out.println("query2Result.3 in " + (System.currentTimeMillis()- startTime) + " ms");startTime = System.currentTimeMillis();		
 
 		  Map<String, Map> bodyMech = new HashMap();
 		  int id = 0;
@@ -408,7 +407,7 @@ public class FsController {
 			  
 			  xx.put("id", ++id);
 			  FsLabel bodyLabel = FsCache.labelMap.get(p.get_bodyLabelId());
-			  xx.put("body_part", bodyLabel!=null ? bodyLabel.getFullDsc(): ("MissingBodyLabel: "+p.get_bodyLabelId()));
+			  xx.put("body_part", bodyLabel!=null ? (referenceId==null?bodyLabel.getFullDsc():bodyLabel.getDsc()): ("MissingBodyLabel: "+p.get_bodyLabelId()));
 			  xx.put("lkp_mechanism_type", p.get_mechanismLabelId());
 			  if(p.get_mechanismLabelId()!=2050) {
 				  FsLabel mechanismLabel = FsCache.labelMap.get(p.get_mechanismLabelId());
