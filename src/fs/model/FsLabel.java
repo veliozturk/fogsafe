@@ -1,5 +1,6 @@
 package fs.model;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,10 +20,15 @@ public class FsLabel implements java.io.Serializable {
 	
 	private String bodyLabelIds;
 	private String mechanismLabelIds;
-	
+	private Integer gender;
+	private Integer minAge;
+	private Integer maxAge;
 	
 	private Map<Integer, Set<Integer>> _phraseMap;
 	private List<FsLabel> _children;
+	private Set<Integer> _setBodyLabels;
+	private Set<Integer> _setMechanismLabels;
+
 	
 	public FsLabel() {
 		super();
@@ -38,6 +44,13 @@ public class FsLabel implements java.io.Serializable {
 		if(j.has("dsc"))this.dsc = j.getString("dsc");
 		if(j.has("synonyms"))this.synonyms = j.getString("synonyms");
 		if(j.has("long_dsc"))this.longDsc = j.getString("long_dsc");
+		if(j.has("lkp_gender_type"))this.gender = j.getInt("lkp_gender_type");
+		if(j.has("min_age"))this.minAge = j.getInt("min_age");
+		if(j.has("max_age"))this.maxAge = j.getInt("max_age");
+		this._setBodyLabels = new HashSet<Integer>();
+		this._setMechanismLabels = new HashSet<Integer>();
+		if(this.bodyLabelIds!=null && this.bodyLabelIds.length()>0)for(String k:this.bodyLabelIds.split(","))this._setBodyLabels.add(Integer.parseInt(k));
+		if(this.mechanismLabelIds!=null && this.mechanismLabelIds.length()>0)for(String k:this.mechanismLabelIds.split(","))this._setMechanismLabels.add(Integer.parseInt(k));
 	}
 
 //	@Id
@@ -152,6 +165,48 @@ public class FsLabel implements java.io.Serializable {
 	public void setLongDsc(String longDsc) {
 		this.longDsc = longDsc;
 	}
+
+	public Integer getGender() {
+		return gender;
+	}
+
+	public void setGender(Integer gender) {
+		this.gender = gender;
+	}
+
+	public Integer getMinAge() {
+		return minAge;
+	}
+
+	public void setMinAge(Integer minAge) {
+		this.minAge = minAge;
+	}
+
+	public Integer getMaxAge() {
+		return maxAge;
+	}
+
+	public void setMaxAge(Integer maxAge) {
+		this.maxAge = maxAge;
+	}
+
+	public Set<Integer> get_setBodyLabels() {
+		return _setBodyLabels;
+	}
+
+	public void set_setBodyLabels(Set<Integer> _setBodyLabels) {
+		this._setBodyLabels = _setBodyLabels;
+	}
+
+	public Set<Integer> get_setMechanismLabels() {
+		return _setMechanismLabels;
+	}
+
+	public void set_setMechanismLabels(Set<Integer> _setMechanismLabels) {
+		this._setMechanismLabels = _setMechanismLabels;
+	}
+
+
 	
 	
 	
