@@ -176,7 +176,11 @@ public class FsPhrase {
 		Map m = new HashMap();
 		m.put("id", phraseId);
 		m.put("dsc", getTextBody());
-		if(html)m.put("html", getBody());
+		if(html) {
+			m.put("html", getBody());
+			if(get_files()!=null)
+				  m.put("files", get_files());
+		}
 		m.put("refId", referenceId);
 //		m.put("html", getBody());
 		m.put("xtype", lkpPhraseType);
