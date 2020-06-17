@@ -172,10 +172,11 @@ public class FsPhrase {
 		this._maxAge = _maxAge;
 	}
 	
-	public Map get_asMap() {
+	public Map get_asMap(boolean html) {
 		Map m = new HashMap();
 		m.put("id", phraseId);
 		m.put("dsc", getTextBody());
+		if(html)m.put("html", getBody());
 		m.put("refId", referenceId);
 //		m.put("html", getBody());
 		m.put("xtype", lkpPhraseType);

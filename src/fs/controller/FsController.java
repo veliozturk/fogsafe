@@ -389,7 +389,7 @@ public class FsController {
 					  considers = new ArrayList();
 					  xx.put("considers", considers);
 				  }
-				  considers.add(p.get_asMap());
+				  considers.add(p.get_asMap(referenceId!=null));
 				  if(!refMap.containsKey(p.getReferenceId()))refMap.put(p.getReferenceId(), FsCache.referenceMap.get(p.getReferenceId()));
 			  }
 			  
@@ -399,7 +399,7 @@ public class FsController {
 					  actions = new ArrayList();
 					  xx.put("actions", actions);
 				  }
-				  actions.add(p.get_asMap());
+				  actions.add(p.get_asMap(referenceId!=null));
 				  if(!refMap.containsKey(p.getReferenceId()))refMap.put(p.getReferenceId(), FsCache.referenceMap.get(p.getReferenceId()));
 			  }
 			  
