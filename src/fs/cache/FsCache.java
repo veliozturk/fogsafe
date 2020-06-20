@@ -70,7 +70,7 @@ public class FsCache {
 		startTime = System.currentTimeMillis();
 		
 		
-		s = HttpUtil.send(url+"ListPhrases", "tokenKey=" + URLEncoder.encode(token));
+		s = HttpUtil.send(url+"ListPhrases", "xactive_flag=1&tokenKey=" + URLEncoder.encode(token));
 
 		JSONObject jphrases =  new JSONObject(s);
 		data = jphrases.getJSONArray("data");

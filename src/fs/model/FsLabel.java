@@ -205,6 +205,13 @@ public class FsLabel implements java.io.Serializable {
 	public void set_setMechanismLabels(Set<Integer> _setMechanismLabels) {
 		this._setMechanismLabels = _setMechanismLabels;
 	}
+	
+	public Set<Integer> get_recursiveChildrenAsSet() {
+		Set<Integer> r = new HashSet<Integer>();
+		r.add(labelId);
+		if(_children!=null)for(FsLabel l:_children)r.addAll(l.get_recursiveChildrenAsSet());
+		return r;
+	}
 
 
 	

@@ -115,7 +115,7 @@ public class FsController {
 			});
 		  List<Map> data = new ArrayList<Map>();
 		  for(FsLabel l:labels) {
-			  Map<String, Object> mm = new HashMap();
+			  Map<String, Object> mm = new HashMap<String, Object>();
 			  mm.put("id", l.getLabelId());
 			  mm.put("dsc", l.getDsc());
 			  mm.put("xtype", l.getLkpLabelCategoryType());
@@ -302,7 +302,7 @@ public class FsController {
 				  if(l.getLkpLabelCategoryType() ==1) {
 					  if(setBodyLabels == null)
 						  setBodyLabels = new HashSet();
-					  setBodyLabels.add(l.getLabelId());	
+					  setBodyLabels.addAll(l.get_recursiveChildrenAsSet());
 				  } else { //normal
 					  if(setLabels == null)
 						  setLabels = new HashSet();
